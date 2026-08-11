@@ -1,0 +1,105 @@
+import sharp from 'sharp';
+import fs from 'fs';
+import path from 'path';
+
+const svgIcon = `
+<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- Background Gradient -->
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#2e1065" />
+      <stop offset="50%" stop-color="#4c1d95" />
+      <stop offset="100%" stop-color="#0f172a" />
+    </linearGradient>
+
+    <!-- Cross & Glow Gradient -->
+    <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fef08a" />
+      <stop offset="50%" stop-color="#f59e0b" />
+      <stop offset="100%" stop-color="#b45309" />
+    </linearGradient>
+
+    <!-- Radial Halo -->
+    <radialGradient id="halo" cx="50%" cy="45%" r="50%">
+      <stop offset="0%" stop-color="#fbbf24" stop-opacity="0.6" />
+      <stop offset="40%" stop-color="#a855f7" stop-opacity="0.3" />
+      <stop offset="100%" stop-color="#0f172a" stop-opacity="0" />
+    </radialGradient>
+
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="12" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+  </defs>
+
+  <!-- Base Rounded Container -->
+  <rect width="512" height="512" rx="108" fill="url(#bgGrad)" />
+
+  <!-- Outer Ring Accent -->
+  <rect x="16" y="16" width="480" height="480" rx="96" fill="none" stroke="#a855f7" stroke-opacity="0.3" stroke-width="4" />
+
+  <!-- Glow Halo Center -->
+  <circle cx="256" cy="230" r="200" fill="url(#halo)" />
+
+  <!-- Starlight Rays -->
+  <g opacity="0.2" stroke="#fef08a" stroke-width="2">
+    <line x1="256" y1="50" x2="256" y2="410" />
+    <line x1="76" y1="230" x2="436" y2="230" />
+    <line x1="128" y1="102" x2="384" y2="358" />
+    <line x1="384" y1="102" x2="128" y2="358" />
+  </g>
+
+  <!-- Central Holy Cross -->
+  <g filter="url(#glow)">
+    <!-- Vertical Cross Stem -->
+    <rect x="232" y="110" width="48" height="250" rx="10" fill="url(#goldGrad)" />
+    <!-- Horizontal Cross Beam -->
+    <rect x="156" y="170" width="200" height="48" rx="10" fill="url(#goldGrad)" />
+  </g>
+
+  <!-- Inner Cross Accent Line -->
+  <rect x="252" y="125" width="8" height="220" rx="4" fill="#ffffff" opacity="0.6" />
+  <rect x="171" y="190" width="170" height="8" rx="4" fill="#ffffff" opacity="0.6" />
+
+  <!-- Sparkles / Holy Lights -->
+  <circle cx="160" cy="130" r="6" fill="#fef08a" />
+  <circle cx="352" cy="130" r="6" fill="#fef08a" />
+  <circle cx="256" cy="70" r="8" fill="#ffffff" />
+
+  <!-- Bottom App Title Text Badge -->
+  <rect x="80" y="400" width="352" height="64" rx="32" fill="#0f172a" fill-opacity="0.85" stroke="#f59e0b" stroke-width="2" />
+  <text x="256" y="442" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="22" font-weight="800" fill="#fef08a" text-anchor="middle" letter-spacing="2">LIVING ON A PRAYER</text>
+</svg>
+`;
+
+async function generateIcons() {
+  const publicDir = path.join(process.cwd(), 'public');
+  if (!fs.existsSync(publicDir)) {
+    fs.mkdirSync(publicDir, { recursive: true });
+  }
+
+  // Save SVG
+  fs.writeFileSync(path.join(publicDir, 'icon.svg'), svgIcon);
+
+  // Generate PNGs
+  const buffer = Buffer.from(svgIcon);
+
+  await sharp(buffer)
+    .resize(512, 512)
+    .png()
+    .toFile(path.join(publicDir, 'icon-512.png'));
+
+  await sharp(buffer)
+    .resize(192, 192)
+    .png()
+    .toFile(path.join(publicDir, 'icon-192.png'));
+
+  await sharp(buffer)
+    .resize(180, 180)
+    .png()
+    .toFile(path.join(publicDir, 'apple-touch-icon.png'));
+
+  console.log('Successfully generated PWA icons in /public!');
+}
+
+generateIcons().catch(console.error);

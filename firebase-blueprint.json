@@ -1,0 +1,51 @@
+{
+  "entities": {
+    "posts": {
+      "title": "Post",
+      "description": "Church community news feed posts and testimonies",
+      "properties": {
+        "title": { "type": "string" },
+        "category": { "type": "string" },
+        "content": { "type": "string" },
+        "imageUrl": { "type": "string" },
+        "createdAt": { "type": "string" },
+        "likesCount": { "type": "number" },
+        "commentsCount": { "type": "number" },
+        "authorName": { "type": "string" },
+        "authorAvatar": { "type": "string" },
+        "authorRole": { "type": "string" },
+        "timestamp": { "type": "number" }
+      },
+      "required": ["title", "category", "content", "authorName"]
+    },
+    "comments": {
+      "title": "Comment",
+      "description": "Comments on news feed posts",
+      "properties": {
+        "postId": { "type": "string" },
+        "authorName": { "type": "string" },
+        "authorAvatar": { "type": "string" },
+        "text": { "type": "string" },
+        "timestamp": { "type": "string" },
+        "createdAt": { "type": "number" }
+      },
+      "required": ["postId", "authorName", "text"]
+    },
+    "prayerRequests": {
+      "title": "PrayerRequest",
+      "description": "Community prayer requests",
+      "properties": {
+        "authorName": { "type": "string" },
+        "authorAvatar": { "type": "string" },
+        "title": { "type": "string" },
+        "description": { "type": "string" },
+        "category": { "type": "string" },
+        "urgent": { "type": "boolean" },
+        "prayingCount": { "type": "number" },
+        "createdAt": { "type": "string font" },
+        "timestamp": { "type": "number" }
+      },
+      "required": ["title", "description", "authorName"]
+    }
+  }
+}

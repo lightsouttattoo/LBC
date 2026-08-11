@@ -1,0 +1,6 @@
+{
+  "name": "Lights Out Baptist - Living on a Prayer",
+  "description": "Lights Out Baptist Church community app featuring login session stability, production user state management, responsive event and group calendar modals, direct video sermons, KJV Bible, and AI Pastoral DMs.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
