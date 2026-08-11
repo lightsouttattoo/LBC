@@ -16,7 +16,16 @@ jobs:
         with:
           node-version: '22'
 
-      - name: Deploy to Lightsail via SSH
+      - name: Copy files to Lightsail via SCP
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.LIGHTSAIL_HOST }}
+          username: ${{ secrets.LIGHTSAIL_USER }}
+          key: ${{ secrets.LIGHTSAIL_SSH_KEY }}
+          source: "."
+          target: "~/app"
+
+      - name: Restart Docker Containers via SSH
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.LIGHTSAIL_HOST }}
@@ -24,6 +33,5 @@ jobs:
           key: ${{ secrets.LIGHTSAIL_SSH_KEY }}
           script: |
             cd ~/app
-            git pull origin main
             docker compose down
             docker compose up -d --build
