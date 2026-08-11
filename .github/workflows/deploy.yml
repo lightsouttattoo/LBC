@@ -24,6 +24,7 @@ jobs:
           key: ${{ secrets.LIGHTSAIL_SSH_KEY }}
           source: "."
           target: "~/app"
+          rm: true
 
       - name: Restart Docker Containers via SSH
         uses: appleboy/ssh-action@master
@@ -31,7 +32,7 @@ jobs:
           host: ${{ secrets.LIGHTSAIL_HOST }}
           username: ${{ secrets.LIGHTSAIL_USER }}
           key: ${{ secrets.LIGHTSAIL_SSH_KEY }}
-          command_timeout: 5m
+          command_timeout: 10m
           script: |
             cd ~/app
             docker compose down --remove-orphans
